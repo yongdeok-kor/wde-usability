@@ -8,3 +8,7 @@ wget https://beta.quicklisp.org/quicklisp.lisp && sbcl --quit --load quicklisp.l
 wget http://act-r.psy.cmu.edu/actr7.x/actr7.x.zip && unzip actr7.x.zip && rm -r actr7.x.zip
 
 /bin/sh -c sbcl --quit --load quicklisp/setup.lisp --eval '(push :standalone *features*)' --load actr7.x/load-act-r.lisp
+
+# install clack
+#/bin/sh -c sbcl --quit --load quicklisp/setup.lisp --eval "(ql:quickload :clack)"
+/bin/sh -c sbcl --quit --load quicklisp/setup.lisp --eval "(ql:quickload '(:ningle :djula :dexador :cl-json))"

@@ -20,9 +20,10 @@
 ;(actr-load "ACT-R:usability;1.0;model;simple_model.lisp")
 ;(actr-load "ACT-R:usability;1.0;task;simple_arm_movement_task.lisp")
 
-(load "/home/donghee/src/wearable_robot_act-r/tmp/actr7.x/usability/1.0/model_parameters.lisp")
-(load "/home/donghee/src/wearable_robot_act-r/tmp/actr7.x/usability/1.0/model/simple_model.lisp")
-(load "/home/donghee/src/wearable_robot_act-r/tmp/actr7.x/usability/1.0/task/simple_arm_movement_task.lisp")
+;(print (sb-posix:getcwd))
+(load "actr7.x/usability/1.0/model_parameters.lisp")
+(load "actr7.x/usability/1.0/model/simple_model.lisp")
+(load "actr7.x/usability/1.0/task/simple_arm_movement_task.lisp")
 
 ;;;
 ;;; Run the simulation model
