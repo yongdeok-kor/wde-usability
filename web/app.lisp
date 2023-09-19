@@ -1,6 +1,7 @@
 (ql:quickload '(:clack :ningle :djula :dexador :cl-json))
 
-(djula:add-template-directory  #P"templates/")
+;(djula:add-template-directory  #P"templates/")
+(djula:add-template-directory  #P"web/templates/")
 (defparameter *template-registry* (make-hash-table :test 'equal))
 
 ;; render template - copied & modified from caveman
