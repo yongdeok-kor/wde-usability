@@ -16,3 +16,4 @@ actr7.x/load-act-r.lisp
 actr7.x/other-files
 actr7.x/support
 quicklisp
+*.fasl
