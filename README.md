@@ -1,30 +1,17 @@
-# wearable_robot_evaluation_usability
+# 웨어러블 디바이스 사용성 평가 모델
 
-웨어러블 디바이스 사용성 평가 모델
+## 실행 방법
 
-## web
-
-roswell https://github.com/roswell/roswell/wiki/Installation#linux
+라이브러리 설치
 
 ```
-curl -L https://github.com/roswell/roswell/releases/download/v19.08.10.101/roswell_19.08.10.101-1_amd64.deb --output roswell.deb
-sudo dpkg -i roswell.deb
+sbcl --load quicklisp/setup.lisp --eval "(ql:quickload '(:ningle :djula :dexador :cl-json))"
 ```
 
-ros install clack
-
-which clackup
+실행
 
 ```
-cat <<EOF >> app.lisp
-(lambda (env)
-  (declare (ignore env))
-  '(200 (:content-type "text/plain") ("Hello, Clack!")))
-EOF
+sbcl --load "quicklisp/setup.lisp" --load "actr7.x/load-act-r.lisp" --load "actr7.x/usability/system_interface.lisp" --load web/app.lisp
 ```
 
-```
-clackup app.lisp
-Hunchentoot server is started.
-Listening on localhost:5000.
-```
+http://127.0.0.1:5050
