@@ -15,4 +15,3 @@ sbcl --load "quicklisp/setup.lisp" --load "actr7.x/load-act-r.lisp" --load "actr
 ```
 
 http://127.0.0.1:5050
-aaaa
