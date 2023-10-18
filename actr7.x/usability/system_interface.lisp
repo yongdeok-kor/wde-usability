@@ -16,9 +16,9 @@
 ;;
 ;;;;;;;;;;;;
 
-(actr-load "E:/model_230816/model_230816/actr-usability/usability/1.0/model_parameters.lisp")
-(actr-load "E:/model_230816/model_230816/actr-usability/usability/1.0/model/simple_model.lisp")
-(actr-load "E:/model_230816/model_230816/actr-usability/usability/1.0/task/simple_arm_movement_task.lisp")
+(actr-load "C:/Users/yongdeok/Documents/GitHub/wde-usability/actr7.x/usability/1.0/model_parameters.lisp")
+(actr-load "C:/Users/yongdeok/Documents/GitHub/wde-usability/actr7.x/usability/1.0/model/simple_model.lisp")
+(actr-load "C:/Users/yongdeok/Documents/GitHub/wde-usability/actr7.x/usability/1.0/task/simple_arm_movement_task.lisp")
 
 
 ;;;
