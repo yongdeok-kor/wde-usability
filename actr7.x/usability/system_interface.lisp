@@ -16,14 +16,10 @@
 ;;
 ;;;;;;;;;;;;
 
-;(actr-load "ACT-R:usability;1.0;model_parameters.lisp")
-;(actr-load "ACT-R:usability;1.0;model;simple_model.lisp")
-;(actr-load "ACT-R:usability;1.0;task;simple_arm_movement_task.lisp")
+(actr-load "E:/model_230816/model_230816/actr-usability/usability/1.0/model_parameters.lisp")
+(actr-load "E:/model_230816/model_230816/actr-usability/usability/1.0/model/simple_model.lisp")
+(actr-load "E:/model_230816/model_230816/actr-usability/usability/1.0/task/simple_arm_movement_task.lisp")
 
-;(print (sb-posix:getcwd))
-(load "actr7.x/usability/1.0/model_parameters.lisp")
-(load "actr7.x/usability/1.0/model/simple_model.lisp")
-(load "actr7.x/usability/1.0/task/simple_arm_movement_task.lisp")
 
 ;;;
 ;;; Run the simulation model
@@ -356,10 +352,10 @@
 ;;; EFFECTIVENESS
 ;;;
 (defun input-effectiveness-parameter (value)
-  (setf (setting-output-list-utility *OUTPUT-PARAMETERS*) value))
+  (setf (setting-output-list-effectiveness *OUTPUT-PARAMETERS*) value))
 
 (defun get-value-effectiveness-parameter ()
-  (setting-output-list-utility *OUTPUT-PARAMETERS*))
+  (setting-output-list-effectiveness *OUTPUT-PARAMETERS*))
 
 
 ;;;

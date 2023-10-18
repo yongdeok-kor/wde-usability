@@ -30,6 +30,9 @@
   )
 
 (defun init-test ()
+  
+  (init-model-parameters)
+  
   ;(setf *current-time* 0)
   ;(setf *desired-ARM-ANGLE* 0)
   ;(setf *wearable-arm-angle* 0)

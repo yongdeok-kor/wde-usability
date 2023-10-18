@@ -16,6 +16,11 @@
 ;;
 ;;;;;;;;;;;;
 
+(defun init-model-parameters ()
+  (setf *WORKLOAD* nil)
+  (setf *UTILITY* nil)
+  )
+
 ;;;;;;;;;;;;
 ;;;
 ;;; Input model parameters 
@@ -97,7 +102,7 @@
 	(cond ((equal (fourth output) "MOVEMENT-CONTINUATION") (incf continuation 1))
 	      ((equal (fourth output) "MOVEMENT-RE-CONTROL") (incf recontrol 1)))))
     
-    (setf value (floor (* 100 (/ continuation (+ continuation recontrol)))))
+    (setf value (floor (+ (act-r-noise (get-value-twin-noise)) (* 100 (/ continuation (+ continuation recontrol))))))
     
     (input-learnability-parameter value)
   ))
@@ -122,7 +127,7 @@
     (cond ((equal (first (get-value-task-information)) "arm") (setf main-task 'arm))
 	  )
     
-    (setf value (get-total-utility-no-decay main-task))
+    (setf value (floor (+ (act-r-noise (get-value-twin-noise)) (get-total-utility-no-decay main-task))))
     (input-utility-parameter value)
     ))
 
@@ -213,7 +218,7 @@
     (cond ((equal (first (get-value-task-information)) "arm") (setf main-task 'arm))
 	  )
     
-    (setf value (get-total-workload main-task))
+    (setf value (floor (+ (act-r-noise (get-value-twin-noise)) (get-total-workload main-task))))
     
     (input-mental-workload-parameter value)
     ))
@@ -368,8 +373,9 @@
   (let ((value 0)
 	(force (get-value-device-force-timeline)))
     
-    (setf value (+ force (act-r-noise (get-value-twin-noise))))
+    (setf value (floor (- 100 (+ force (act-r-noise (get-value-twin-noise))))))
     (input-human-error-parameter value)
+    (input-effectiveness-parameter value)
   ))
 
 
