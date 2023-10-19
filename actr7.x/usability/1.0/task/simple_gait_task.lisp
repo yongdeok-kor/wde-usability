@@ -16,23 +16,22 @@
 ;;
 ;;;;;;;;;;;;
 
-(load-act-r-model "actr7.x/usability/1.0/model/simple_model.lisp")
+;(load-act-r-model "~/Documents/MODEL/usability/1.0/simple_model.lisp")
+(load-act-r-model "actr7.x/usability/1.0/model/gait-simple-model.lisp")
 
+(defvar *gait-pos* 0)
 
-(defun set-arm-movement-task-parameters (params)
+(defun set-gait-movement-task-parameters (params)
   (let ((mode (second params)))
     (if mode
 	(cond ((string= mode "fixed")
-	       (set-parameter-value :set-arm-mode t))
+	       (set-parameter-value :set-gait-mode t))
 	      ((string= mode "adaptive")
-	       (set-parameter-value :set-arm-mode nil)))
+	       (set-parameter-value :set-gait-mode nil)))
 	))
   )
 
-(defun init-test ()
-  
-  ;(init-model-parameters)
-  
+(defun init-gait-test ()
   ;(setf *current-time* 0)
   ;(setf *desired-ARM-ANGLE* 0)
   ;(setf *wearable-arm-angle* 0)
@@ -43,16 +42,18 @@
   ;(setf *text* nil)
   ;(setf *stroop-list* (make-stroop-list *level*))
 					;(setf *WORKLOAD* nil)
+
+  (setf *gait-pos* 0)
   
   (enable-trace-history)
   )
 
 
-(defun do-test ()  ;;FUNCTION FOR TEST (DEBUGGING)
+(defun do-gait-test ()  ;;FUNCTION FOR TEST (DEBUGGING)
   
   (reset)
   
-  (init-test)
+  (init-gait-test)
   
   ;(schedule-event-relative *DELAY* 'next-movement :time-in-ms t)
   
@@ -71,15 +72,18 @@
   )
   
 
-(defun do-test-until-time (time)
+(defun do-gait-test-until-time (time)
   
   ;(reset)
   
-  (init-test)
-  
-  ;(schedule-event-relative *DELAY* 'next-movement :time-in-ms t)
-  
-  
+  (init-gait-test)
+
+  (let* ((window (open-exp-window "GAIT" :visible nil))
+	 (target (add-text-to-exp-window window "O" :x 50 :y 50))
+	 (recheck (add-text-to-exp-window window "X" :x 50 :y 75)))
+
+    (install-device window)
+    
   (enable-buffer-trace-history)
   (enable-buffer-trace-buffer 'goal)
   (enable-buffer-trace-buffer 'imaginal)
@@ -99,4 +103,4 @@
   (output-effectiveness-parameter)
   (output-performance-parameter)
   
-  )
+  ))

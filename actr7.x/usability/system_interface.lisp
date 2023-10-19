@@ -16,10 +16,15 @@
 ;;
 ;;;;;;;;;;;;
 
-(actr-load "actr7.x/usability/1.0/model_parameters.lisp")
-(actr-load "actr7.x/usability/1.0/model/simple_model.lisp")
-(actr-load "actr7.x/usability/1.0/task/simple_arm_movement_task.lisp")
+;(actr-load "ACT-R:usability;1.0;model_parameters.lisp")
+;(actr-load "ACT-R:usability;1.0;model;simple_model.lisp")
+;(actr-load "ACT-R:usability;1.0;task;simple_arm_movement_task.lisp")
 
+;(print (sb-posix:getcwd))
+(load "actr7.x/usability/1.0/model_parameters.lisp")
+;(load "actr7.x/usability/1.0/model/simple_model.lisp")
+;(load "actr7.xusability/1.0/task/simple_arm_movement_task.lisp")
+;(load "actr7.x/usability/1.0/task/simple_gait_task.lisp")
 
 ;;;
 ;;; Run the simulation model
@@ -43,18 +48,30 @@
 	(error-value      0)
 	(model-output-text))
 
-  (reset)
+    (reset)
+
+    (load "c:/Users/yongdeok/actr7.x/usability/1.0/model_parameters.lisp")
+
+    ;;load task and model
+    (cond ((string= (first task) "arm")
+	   (load "actr7.x/usability/1.0/task/simple_arm_movement_task.lisp"))
+	  ((string= (first task) "gait")
+	   (load "actr7.x/usability/1.0/task/simple_gait_task.lisp")))
   
   ;;;setting parameters
+  (input-twin-age-parameter age)
   (input-task-information-parameter task)
   (input-twin-cognitive-ability-parameter cog-level)
   (input-device-force-timeline-parameter force)
-  (input-twin-noise-parameter noise)
+    (input-twin-noise-parameter noise)
+    (input-task-performance-time-parameter time)
   
   (setting-twin-parameters-for-model *SETTING-INPUT-PARAMETERS*)
    
   ;;;run the model
-  (setf model-output-text (do-test-until-time time))
+  (cond ((string= (first task) "arm") (setf model-output-text (do-test-until-time time)))
+	((string= (first task) "gait") (setf model-output-text (do-gait-test-until-time time))))
+      
   
   ;;;calculate the simulation output parameters
   (setf learnability  (get-value-learnability-parameter))
@@ -352,10 +369,10 @@
 ;;; EFFECTIVENESS
 ;;;
 (defun input-effectiveness-parameter (value)
-  (setf (setting-output-list-effectiveness *OUTPUT-PARAMETERS*) value))
+  (setf (setting-output-list-utility *OUTPUT-PARAMETERS*) value))
 
 (defun get-value-effectiveness-parameter ()
-  (setting-output-list-effectiveness *OUTPUT-PARAMETERS*))
+  (setting-output-list-utility *OUTPUT-PARAMETERS*))
 
 
 ;;;

@@ -16,11 +16,6 @@
 ;;
 ;;;;;;;;;;;;
 
-(defun init-model-parameters ()
-  (setf *WORKLOAD* nil)
-  (setf *UTILITY* nil)
-  )
-
 ;;;;;;;;;;;;
 ;;;
 ;;; Input model parameters 
@@ -31,20 +26,46 @@
   ;;;
   ;;; Setting Model Parameters
   ;;;
-  (let ((cognitive-ability (get-value-twin-cognitive-ability))
-	(task-inform (get-value-task-information)))
+  (let ((age (get-value-twin-age))
+	(cognitive-ability (get-value-twin-cognitive-ability))
+	(task-inform (get-value-task-information))
+	(perform-time (get-value-task-performance-time))
+	(error-rate (get-value-device-force-timeline)))
   
     ;;;latency factor
     (if cognitive-ability
 	(cond ((equal cognitive-ability "high") (set-parameter-value :lf 0.1))
 	      ((equal cognitive-ability "low")  (set-parameter-value :lf 1.0)))
-      (set-parameter-value :lf 0.1)) ;;defalut value
+	(set-parameter-value :lf 0.1)) ;;defalut value
+
+    ;;;age
+    (if age
+	(if (> age 80) (set-parameter-value :lf 1.0)
+	    (if (> age 60) (set-parameter-value :lf 0.5)
+		(if (> age 30) (set-parameter-value :lf 0.2)
+		    (if (> age 20) (set-parameter-value :lf 0.1)
+		    (set-parameter-value :lf 0.2)))))
+	(set-parameter-value :lf 0.1))
     
     
     ;;;task information
     (when (> (list-length task-inform) 0)
       (cond ((string= (first task-inform) "arm")
-	       (set-arm-movement-task-parameters task-inform))))
+	     (set-arm-movement-task-parameters task-inform))
+	    ((string= (first task-inform) "gait")
+	     (set-gait-movement-task-parameters task-inform))))
+
+    ;;;perform-time (gait)
+    (if perform-time
+	(set-parameter-value :set-data-for-perform-time perform-time)
+	(set-parameter-value :set-data-for-perform-time 10))
+
+    ;;;error-rate (gait)
+    (if perform-time
+	(set-parameter-value :set-gait-force-rate error-rate)
+	(set-parameter-value :set-gait-force-rate 20))
+
+    
     ))
 
 
@@ -101,8 +122,9 @@
       (when (equal (third output) "PRODUCTION-FIRED")
 	(cond ((equal (fourth output) "MOVEMENT-CONTINUATION") (incf continuation 1))
 	      ((equal (fourth output) "MOVEMENT-RE-CONTROL") (incf recontrol 1)))))
-    
-    (setf value (floor (+ (act-r-noise (get-value-twin-noise)) (* 100 (/ continuation (+ continuation recontrol))))))
+
+    (if (= (+ continuation recontrol) 0) (setf value 1)
+	(setf value (floor (* 100 (/ continuation (+ continuation recontrol))))))
     
     (input-learnability-parameter value)
   ))
@@ -125,9 +147,10 @@
 	(main-task nil))
     
     (cond ((equal (first (get-value-task-information)) "arm") (setf main-task 'arm))
+	  ((equal (first (get-value-task-information)) "gait") (setf main-task 'gait))
 	  )
     
-    (setf value (floor (+ (act-r-noise (get-value-twin-noise)) (get-total-utility-no-decay main-task))))
+    (setf value (get-total-utility-no-decay main-task))
     (input-utility-parameter value)
     ))
 
@@ -216,9 +239,10 @@
 	(main-task nil))
     
     (cond ((equal (first (get-value-task-information)) "arm") (setf main-task 'arm))
+	  ((equal (first (get-value-task-information)) "gait") (setf main-task 'gait))
 	  )
     
-    (setf value (floor (+ (act-r-noise (get-value-twin-noise)) (get-total-workload main-task))))
+    (setf value (get-total-workload main-task))
     
     (input-mental-workload-parameter value)
     ))
@@ -373,9 +397,8 @@
   (let ((value 0)
 	(force (get-value-device-force-timeline)))
     
-    (setf value (floor (- 100 (+ force (act-r-noise (get-value-twin-noise))))))
+    (setf value (+ force (act-r-noise (get-value-twin-noise))))
     (input-human-error-parameter value)
-    (input-effectiveness-parameter value)
   ))
 
 
