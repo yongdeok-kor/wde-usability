@@ -50,7 +50,7 @@
 
     (reset)
 
-    (load "c:/Users/yongdeok/actr7.x/usability/1.0/model_parameters.lisp")
+    (load "actr7.x/usability/1.0/model_parameters.lisp")
 
     ;;load task and model
     (cond ((string= (first task) "arm")
