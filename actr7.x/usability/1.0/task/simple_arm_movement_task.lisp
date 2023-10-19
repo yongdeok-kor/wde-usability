@@ -16,6 +16,7 @@
 ;;
 ;;;;;;;;;;;;
 
+;(load-act-r-model "~/Documents/MODEL/usability/1.0/simple_model.lisp")
 (load-act-r-model "actr7.x/usability/1.0/model/simple_model.lisp")
 
 
@@ -30,9 +31,6 @@
   )
 
 (defun init-test ()
-  
-  ;(init-model-parameters)
-  
   ;(setf *current-time* 0)
   ;(setf *desired-ARM-ANGLE* 0)
   ;(setf *wearable-arm-angle* 0)
