@@ -8,8 +8,10 @@
   </div>
 </div>
 <div id="btn-more" class="d-grid gap-2 col-3 mx-auto">
-  <button class="btn btn-primary" hx-get="usability.html" hx-target="#usability-result" hx-swap="innerHTML">시작</button>
+  <button class="btn btn-primary" hx-get="/usability" hx-target="#usability-result" hx-swap="innerHTML"
+    hx-on::after-request="document.getElementById('usability-result-fig').style.display='block'" hx-indicator="#spinner">시작</button>
 </div>
 <div id="usability-result">
 </div>
+<img id="usability-result-fig" src="fig" style="display: none"/>
 {% endblock %}
