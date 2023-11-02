@@ -100,7 +100,7 @@
 	(get-value-ACT-R-model-output))
     ))
 
-(add-act-r-command "run-the-model-until-time", 'run-the-model-until-time, "run-the-model-until-time function")
+(add-act-r-command "run-the-model-until-time" 'run-the-model-until-time "run-the-model-until-time function")
 
 
 
@@ -148,7 +148,7 @@
 (defun setting-input-parameters ()
   (setting-twin-parameters-for-model *SETTING-INPUT-PARAMETERS*))
 
-(add-act-r-command "setting-input-parameters", 'setting-input-parameters)
+(add-act-r-command "setting-input-parameters" 'setting-input-parameters)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;
@@ -169,8 +169,8 @@
 (defun get-value-twin-age ()
   (setting-input-parameter-list-twin-age *SETTING-INPUT-PARAMETERS*))
 
-(add-act-r-command "input-twin-age-parameter", 'input-twin-age-parameter)
-(add-act-r-command "get-value-twin-age", 'get-value-twin-age)
+(add-act-r-command "input-twin-age-parameter" 'input-twin-age-parameter)
+(add-act-r-command "get-value-twin-age" 'get-value-twin-age)
 
 ;;;
 ;;; TWIN GENDER
@@ -181,8 +181,8 @@
 (defun get-value-twin-gender ()
   (setting-input-parameter-list-twin-gender *SETTING-INPUT-PARAMETERS*))
 
-(add-act-r-command "input-twin-gender-parameter", 'input-twin-age-parameter)
-(add-act-r-command "get-value-twin-gender", 'get-value-twin-gender)
+(add-act-r-command "input-twin-gender-parameter" 'input-twin-age-parameter)
+(add-act-r-command "get-value-twin-gender" 'get-value-twin-gender)
 
 
 ;;;
@@ -194,8 +194,8 @@
 (defun get-value-twin-cognitive-ability ()
   (setting-input-parameter-list-twin-cognitive-ability *SETTING-INPUT-PARAMETERS*))
 
-(add-act-r-command "input-twin-cognitive-ability-parameter", 'input-twin-cognitive-ability-parameter)
-(add-act-r-command "get-value-twin-cognitive-ability", 'get-value-twin-cognitive-ability)
+(add-act-r-command "input-twin-cognitive-ability-parameter" 'input-twin-cognitive-ability-parameter)
+(add-act-r-command "get-value-twin-cognitive-ability" 'get-value-twin-cognitive-ability)
 
 
 ;;;
@@ -207,8 +207,8 @@
 (defun get-value-twin-cognitive-focus-ability ()
   (setting-input-parameter-list-twin-cognitive-focus-ability *SETTING-INPUT-PARAMETERS*))
 
-(add-act-r-command "input-twin-cognitive-focus-ability-parameter", 'input-twin-cognitive-focus-ability-parameter)
-(add-act-r-command "get-value-twin-cognitive-focus-ability", 'get-value-twin-cognitive-focus-ability)
+(add-act-r-command "input-twin-cognitive-focus-ability-parameter" 'input-twin-cognitive-focus-ability-parameter)
+(add-act-r-command "get-value-twin-cognitive-focus-ability" 'get-value-twin-cognitive-focus-ability)
 
 
 ;;;
@@ -220,8 +220,8 @@
 (defun get-value-twin-physical-ability ()
   (setting-input-parameter-list-twin-physical-ability *SETTING-INPUT-PARAMETERS*))
 
-(add-act-r-command "input-twin-physical-ability-parameter", 'input-twin-physical-ability-parameter)
-(add-act-r-command "get-value-twin-physical-ability", 'get-value-twin-physical-ability)
+(add-act-r-command "input-twin-physical-ability-parameter" 'input-twin-physical-ability-parameter)
+(add-act-r-command "get-value-twin-physical-ability" 'get-value-twin-physical-ability)
 
 
 ;;;
@@ -233,8 +233,8 @@
 (defun get-value-twin-physical-agility ()
   (setting-input-parameter-list-twin-physical-agility *SETTING-INPUT-PARAMETERS*))
 
-(add-act-r-command "input-twin-physical-agility-parameter", 'input-twin-physical-agility-parameter)
-(add-act-r-command "get-value-twin-physical-agility", 'get-value-twin-physical-agility)
+(add-act-r-command "input-twin-physical-agility-parameter" 'input-twin-physical-agility-parameter)
+(add-act-r-command "get-value-twin-physical-agility" 'get-value-twin-physical-agility)
 
 
 ;;;
@@ -250,8 +250,8 @@
 (defun get-value-task-information ()
   (setting-input-parameter-list-task-information *SETTING-INPUT-PARAMETERS*))
 
-(add-act-r-command "input-task-information-parameter", 'input-task-information-parameter)
-(add-act-r-command "get-value-task-information", 'get-value-task-information)
+(add-act-r-command "input-task-information-parameter" 'input-task-information-parameter)
+(add-act-r-command "get-value-task-information" 'get-value-task-information)
 
 
 ;;;
@@ -267,8 +267,8 @@
 (defun get-value-twin-trajectory-timeline ()
   (setting-input-parameter-list-twin-trajectory-timeline *SETTING-INPUT-PARAMETERS*))
 
-(add-act-r-command "input-twin-trajectory-timeline-parameter", 'input-twin-trajectory-timeline-parameter)
-(add-act-r-command "get-value-twin-trajectory-timeline", 'get-value-twin-trajectory-timeline)
+(add-act-r-command "input-twin-trajectory-timeline-parameter" 'input-twin-trajectory-timeline-parameter)
+(add-act-r-command "get-value-twin-trajectory-timeline" 'get-value-twin-trajectory-timeline)
 
 
 ;;;
@@ -280,8 +280,8 @@
 (defun get-value-device-force-timeline ()
   (setting-input-parameter-list-device-force-timeline *SETTING-INPUT-PARAMETERS*))
 
-(add-act-r-command "input-device-force-timeline-parameter", 'input-device-force-timeline-parameter)
-(add-act-r-command "get-value-device-force-timeline", 'get-value-device-force-timeline)
+(add-act-r-command "input-device-force-timeline-parameter" 'input-device-force-timeline-parameter)
+(add-act-r-command "get-value-device-force-timeline" 'get-value-device-force-timeline)
 
 
 ;;;
@@ -293,8 +293,8 @@
 (defun get-value-event-reaction-time-list ()
   (setting-input-parameter-list-event-reaction-time-list *SETTING-INPUT-PARAMETERS*))
 
-(add-act-r-command "input-event-reaction-time-list-parameter", 'input-event-reaction-time-list-parameter)
-(add-act-r-command "get-value-event-reaction-time-list", 'get-value-event-reaction-time-list)
+(add-act-r-command "input-event-reaction-time-list-parameter" 'input-event-reaction-time-list-parameter)
+(add-act-r-command "get-value-event-reaction-time-list" 'get-value-event-reaction-time-list)
 
 
 ;;;
@@ -306,8 +306,8 @@
 (defun get-value-event-error-list ()
   (setting-input-parameter-list-event-error-list *SETTING-INPUT-PARAMETERS*))
 
-(add-act-r-command "input-event-error-list-parameter", 'input-event-error-list-parameter)
-(add-act-r-command "get-value-event-error-list", 'get-value-event-error-list)
+(add-act-r-command "input-event-error-list-parameter" 'input-event-error-list-parameter)
+(add-act-r-command "get-value-event-error-list" 'get-value-event-error-list)
 
 
 ;;;
@@ -319,8 +319,8 @@
 (defun get-value-task-performance-time ()
   (setting-input-parameter-list-task-performance-time *SETTING-INPUT-PARAMETERS*))
 
-(add-act-r-command "input-task-performance-time-parameter", 'input-task-performance-time-parameter)
-(add-act-r-command "get-value-task-performance-time", 'get-value-task-performance-time)
+(add-act-r-command "input-task-performance-time-parameter" 'input-task-performance-time-parameter)
+(add-act-r-command "get-value-task-performance-time" 'get-value-task-performance-time)
 
 ;;;
 ;;; RESERVE PARAMETER
@@ -331,8 +331,8 @@
 (defun get-value-task-performance-reserve ()
   (setting-input-parameter-list-task-performance-reserve *SETTING-INPUT-PARAMETERS*))
 
-(add-act-r-command "input-task-performance-reserve-parameter", 'input-task-performance-reserve-parameter)
-(add-act-r-command "get-value-task-performance-reserve", 'get-value-task-performance-reserve)
+(add-act-r-command "input-task-performance-reserve-parameter" 'input-task-performance-reserve-parameter)
+(add-act-r-command "get-value-task-performance-reserve" 'get-value-task-performance-reserve)
 
 
 ;;;
@@ -344,8 +344,8 @@
 (defun get-value-twin-noise ()
   (setting-input-parameter-list-twin-noise *SETTING-INPUT-PARAMETERS*))
 
-(add-act-r-command "input-twin-noise-parameter", 'input-twin-noise-parameter)
-(add-act-r-command "get-value-twin-noise", 'get-value-twin-noise)
+(add-act-r-command "input-twin-noise-parameter" 'input-twin-noise-parameter)
+(add-act-r-command "get-value-twin-noise" 'get-value-twin-noise)
 
 
 
@@ -364,8 +364,8 @@
 (defun get-value-ACT-R-model-output ()
   (setting-output-list-ACT-R-output *OUTPUT-PARAMETERS*))
 
-(add-act-r-command "input-ACT-R-model-output", 'input-ACT-R-model-output)
-(add-act-r-command "get-value-ACT-R-model-output", 'get-value-ACT-R-model-output)
+(add-act-r-command "input-ACT-R-model-output" 'input-ACT-R-model-output)
+(add-act-r-command "get-value-ACT-R-model-output" 'get-value-ACT-R-model-output)
 
 
 
@@ -378,8 +378,8 @@
 (defun get-value-human-error-parameter ()
   (setting-output-list-human-error *OUTPUT-PARAMETERS*))
 
-(add-act-r-command "input-human-error-parameter", 'input-human-error-parameter)
-(add-act-r-command "get-value-human-error-parameter", 'get-value-human-error-parameter)
+(add-act-r-command "input-human-error-parameter" 'input-human-error-parameter)
+(add-act-r-command "get-value-human-error-parameter" 'get-value-human-error-parameter)
 
 
 
@@ -392,8 +392,8 @@
 (defun get-value-mental-workload-parameter ()
   (setting-output-list-mental-workload *OUTPUT-PARAMETERS*))
 
-(add-act-r-command "input-mental-workload-parameter", 'input-mental-workload-parameter)
-(add-act-r-command "get-value-mental-workload-parameter", 'get-value-mental-workload-parameter)
+(add-act-r-command "input-mental-workload-parameter" 'input-mental-workload-parameter)
+(add-act-r-command "get-value-mental-workload-parameter" 'get-value-mental-workload-parameter)
 
 
 
@@ -406,8 +406,8 @@
 (defun get-value-learnability-parameter ()
   (setting-output-list-learnability *OUTPUT-PARAMETERS*))
 
-(add-act-r-command "input-learnability-parameter", 'input-learnability-parameter)
-(add-act-r-command "get-value-learnability-parameter", 'get-value-learnability-parameter)
+(add-act-r-command "input-learnability-parameter" 'input-learnability-parameter)
+(add-act-r-command "get-value-learnability-parameter" 'get-value-learnability-parameter)
 
 
 ;;;
@@ -419,8 +419,8 @@
 (defun get-value-memorability-parameter ()
   (setting-output-list-memorability *OUTPUT-PARAMETERS*))
 
-(add-act-r-command "input-memorability-parameter", 'input-memorability-parameter)
-(add-act-r-command "get-value-memorability-parameter", 'get-value-memorability-parameter)
+(add-act-r-command "input-memorability-parameter" 'input-memorability-parameter)
+(add-act-r-command "get-value-memorability-parameter" 'get-value-memorability-parameter)
 
 
 
@@ -433,8 +433,8 @@
 (defun get-value-utility-parameter ()
   (setting-output-list-utility *OUTPUT-PARAMETERS*))
 
-(add-act-r-command "input-utility-parameter", 'input-utility-parameter)
-(add-act-r-command "get-value-utility-parameter", 'get-value-utility-parameter)
+(add-act-r-command "input-utility-parameter" 'input-utility-parameter)
+(add-act-r-command "get-value-utility-parameter" 'get-value-utility-parameter)
 
 
 
@@ -447,8 +447,8 @@
 (defun get-value-effectiveness-parameter ()
   (setting-output-list-utility *OUTPUT-PARAMETERS*))
 
-(add-act-r-command "input-effectiveness-parameter", 'input-effectiveness-parameter)
-(add-act-r-command "get-value-effectiveness-parameter", 'get-value-effectiveness-parameter)
+(add-act-r-command "input-effectiveness-parameter" 'input-effectiveness-parameter)
+(add-act-r-command "get-value-effectiveness-parameter" 'get-value-effectiveness-parameter)
 
 
 
@@ -461,6 +461,6 @@
 (defun get-value-total-usability-parameter ()
   (setting-output-list-total-usability *OUTPUT-PARAMETERS*))
 
-(add-act-r-command "input-total-usability-parameter", 'input-total-usability-parameter)
-(add-act-r-command "get-value-total-usability-parameter", 'get-value-total-usability-parameter)
+(add-act-r-command "input-total-usability-parameter" 'input-total-usability-parameter)
+(add-act-r-command "get-value-total-usability-parameter" 'get-value-total-usability-parameter)
 

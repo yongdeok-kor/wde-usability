@@ -68,7 +68,7 @@
     
     ))
 
-(add-act-r-command "setting-twin-parameters-for-model", 'setting-twin-parameters-for-model)
+(add-act-r-command "setting-twin-parameters-for-model" 'setting-twin-parameters-for-model)
 
 
 ;;;;;;;;;;;;
@@ -418,6 +418,6 @@
   (output-performance-parameter)
   )
 
-(add-act-r-command "output-total-model-parameters", 'output-total-model-parameters)
+(add-act-r-command "output-total-model-parameters" 'output-total-model-parameters)
 
   

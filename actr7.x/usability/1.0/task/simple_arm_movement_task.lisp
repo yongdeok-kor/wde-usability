@@ -55,7 +55,7 @@
   
   )
 
-(add-act-r-command "init-arm-test", 'init-arm-test)
+(add-act-r-command "init-arm-test" 'init-arm-test)
 
 
 (defun do-test ()  ;;FUNCTION FOR TEST (DEBUGGING)
