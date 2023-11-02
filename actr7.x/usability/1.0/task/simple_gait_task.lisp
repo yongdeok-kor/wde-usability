@@ -58,7 +58,7 @@
   
   )
 
-(add-act-r-command "init-gait-test", 'init-gait-test)
+(add-act-r-command "init-gait-test" 'init-gait-test)
 
 
 (defun do-gait-test ()  ;;FUNCTION FOR TEST (DEBUGGING)
