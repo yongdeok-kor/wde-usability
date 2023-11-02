@@ -92,8 +92,6 @@ def usability_figure(values):
     # 항목 리스트
     labels = ["TOTAL_USABILITY", "LEARNABILITY", "UTILITY", "EFFICIENCY", "EFFECTIVENESS"]
 
-    values = [80, 70, 60, 75, 85]
-    
     # 그래프의 크기와 여백을 설정
     fig, axs = plt.subplots(1, len(labels), figsize=(15, 3))
     
