@@ -11,7 +11,7 @@
 import actr
 import math
 import matplotlib.pyplot as plt
-import numpy as np
+from io import BytesIO
 
 
 actr.load_act_r_code("actr7.x/usability/system_interface.lisp")
@@ -67,9 +67,12 @@ def run_usability_system(time, task, age, force, noise):
 
     total_usability_value = (learnability + utility + efficiency + effectiveness) / 4
 
-    make_usability_graph([total_usability_value, learnability, utility, efficiency, effectiveness])
+    #make_usability_graph([total_usability_value, learnability, utility, efficiency, effectiveness])
 
-    return [math.floor(total_usability_value), [memorability, utility, efficiency, effectiveness], performance_time, get_value_ACT_R_model_output()]
+    return_usability_value = [math.floor(total_usability_value), [memorability, utility, efficiency, effectiveness], performance_time, get_value_ACT_R_model_output()]
+
+    #return return_usability_value
+    return return_usability_value
 
 
 def make_usability_graph (usability):
@@ -80,9 +83,36 @@ def make_usability_graph (usability):
     plt.xticks(x, usability_name)
 
 
-def draw_usability_graph ():
-    plt.show()
+def draw_usability_graph (time, task, age, force, noise):
+    model_results = run_usability_system(time, task, age, force, noise)
+    return usability_figure([model_results[0], model_results[1][0], model_results[1][1], model_results[1][2], model_results[1][3]])
+
+
+def usability_figure(values):
+    # 항목 리스트
+    labels = ["TOTAL_USABILITY", "LEARNABILITY", "UTILITY", "EFFICIENCY", "EFFECTIVENESS"]
+
+    values = [80, 70, 60, 75, 85]
     
+    # 그래프의 크기와 여백을 설정
+    fig, axs = plt.subplots(1, len(labels), figsize=(15, 3))
+    
+    # 각 항목에 대한 도너츠 모양 원형 그래프를 그립니다.
+    for i, (label, value) in enumerate(zip(labels, values)):
+        axs[i].pie([value, 100 - value], labels=[label if p == value else None for p in [value, 100-value]], 
+                   startangle=90, autopct=lambda p: '{:.0f}'.format(p) if p == value else '', 
+                   wedgeprops=dict(width=0.4), counterclock=False)
+        axs[i].set_title(label)
+    
+    # 이미지로 저장
+    img = BytesIO()
+    plt.tight_layout()
+    plt.savefig(img, format='png', dpi=100)
+    img.seek(0)
+    
+    return img
+
+
 
 
 
