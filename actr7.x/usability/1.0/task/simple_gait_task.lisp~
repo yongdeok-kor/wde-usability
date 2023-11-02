@@ -46,19 +46,7 @@
   (setf *gait-pos* 0)
   
   (enable-trace-history)
-
-  (enable-buffer-trace-history)
-  (enable-buffer-trace-buffer 'goal)
-  (enable-buffer-trace-buffer 'imaginal)
-  (enable-buffer-trace-buffer 'manual)
-  (enable-buffer-trace-buffer 'production)
-  (enable-buffer-trace-buffer 'retrieval)
-  (enable-buffer-trace-buffer 'visual)
-  (enable-buffer-trace-buffer 'visual-location)
-  
   )
-
-(add-act-r-command "init-gait-test", 'init-gait-test)
 
 
 (defun do-gait-test ()  ;;FUNCTION FOR TEST (DEBUGGING)
@@ -70,14 +58,14 @@
   ;(schedule-event-relative *DELAY* 'next-movement :time-in-ms t)
   
   
-  ;(enable-buffer-trace-history)
-  ;(enable-buffer-trace-buffer 'goal)
-  ;(enable-buffer-trace-buffer 'imaginal)
-  ;(enable-buffer-trace-buffer 'manual)
-  ;(enable-buffer-trace-buffer 'production)
-  ;(enable-buffer-trace-buffer 'retrieval)
-  ;(enable-buffer-trace-buffer 'visual)
-  ;(enable-buffer-trace-buffer 'visual-location)
+  (enable-buffer-trace-history)
+  (enable-buffer-trace-buffer 'goal)
+  (enable-buffer-trace-buffer 'imaginal)
+  (enable-buffer-trace-buffer 'manual)
+  (enable-buffer-trace-buffer 'production)
+  (enable-buffer-trace-buffer 'retrieval)
+  (enable-buffer-trace-buffer 'visual)
+  (enable-buffer-trace-buffer 'visual-location)
     
   (run 4 nil)
   
@@ -96,14 +84,14 @@
 
     (install-device window)
     
-  ;(enable-buffer-trace-history)
-  ;(enable-buffer-trace-buffer 'goal)
-  ;(enable-buffer-trace-buffer 'imaginal)
-  ;(enable-buffer-trace-buffer 'manual)
-  ;(enable-buffer-trace-buffer 'production)
-  ;(enable-buffer-trace-buffer 'retrieval)
-  ;(enable-buffer-trace-buffer 'visual)
-  ;(enable-buffer-trace-buffer 'visual-location)
+  (enable-buffer-trace-history)
+  (enable-buffer-trace-buffer 'goal)
+  (enable-buffer-trace-buffer 'imaginal)
+  (enable-buffer-trace-buffer 'manual)
+  (enable-buffer-trace-buffer 'production)
+  (enable-buffer-trace-buffer 'retrieval)
+  (enable-buffer-trace-buffer 'visual)
+  (enable-buffer-trace-buffer 'visual-location)
     
   (run time nil)
   
@@ -115,6 +103,4 @@
   (output-effectiveness-parameter)
   (output-performance-parameter)
   
-    ))
-
-
+  ))

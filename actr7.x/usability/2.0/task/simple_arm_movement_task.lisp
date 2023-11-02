@@ -16,8 +16,7 @@
 ;;
 ;;;;;;;;;;;;
 
-;(load-act-r-model "~/Documents/MODEL/usability/1.0/simple_model.lisp")
-(load-act-r-model "actr7.x/usability/1.0/model/simple_model.lisp")
+(load-act-r-model "~/Documents/MODEL/usability/1.0/simple_model.lisp")
 
 
 (defun set-arm-movement-task-parameters (params)
@@ -30,7 +29,10 @@
 	))
   )
 
-(defun init-arm-test ()
+(defun init-test ()
+  
+  (init-model-parameters)
+  
   ;(setf *current-time* 0)
   ;(setf *desired-ARM-ANGLE* 0)
   ;(setf *wearable-arm-angle* 0)
@@ -43,7 +45,18 @@
 					;(setf *WORKLOAD* nil)
   
   (enable-trace-history)
+  )
 
+
+(defun do-test ()  ;;FUNCTION FOR TEST (DEBUGGING)
+  
+  (reset)
+  
+  (init-test)
+  
+  ;(schedule-event-relative *DELAY* 'next-movement :time-in-ms t)
+  
+  
   (enable-buffer-trace-history)
   (enable-buffer-trace-buffer 'goal)
   (enable-buffer-trace-buffer 'imaginal)
@@ -52,29 +65,6 @@
   (enable-buffer-trace-buffer 'retrieval)
   (enable-buffer-trace-buffer 'visual)
   (enable-buffer-trace-buffer 'visual-location)
-  
-  )
-
-(add-act-r-command "init-arm-test", 'init-arm-test)
-
-
-(defun do-test ()  ;;FUNCTION FOR TEST (DEBUGGING)
-  
-  (reset)
-  
-  (init-arm-test)
-  
-  ;(schedule-event-relative *DELAY* 'next-movement :time-in-ms t)
-  
-  
-  ;(enable-buffer-trace-history)
-  ;(enable-buffer-trace-buffer 'goal)
-  ;(enable-buffer-trace-buffer 'imaginal)
-  ;(enable-buffer-trace-buffer 'manual)
-  ;(enable-buffer-trace-buffer 'production)
-  ;(enable-buffer-trace-buffer 'retrieval)
-  ;(enable-buffer-trace-buffer 'visual)
-  ;(enable-buffer-trace-buffer 'visual-location)
     
   (run 4 nil)
   
@@ -85,19 +75,19 @@
   
   ;(reset)
   
-  (init-arm-test)
+  (init-test)
   
   ;(schedule-event-relative *DELAY* 'next-movement :time-in-ms t)
   
   
-  ;(enable-buffer-trace-history)
-  ;(enable-buffer-trace-buffer 'goal)
-  ;(enable-buffer-trace-buffer 'imaginal)
-  ;(enable-buffer-trace-buffer 'manual)
-  ;(enable-buffer-trace-buffer 'production)
-  ;(enable-buffer-trace-buffer 'retrieval)
-  ;(enable-buffer-trace-buffer 'visual)
-  ;(enable-buffer-trace-buffer 'visual-location)
+  (enable-buffer-trace-history)
+  (enable-buffer-trace-buffer 'goal)
+  (enable-buffer-trace-buffer 'imaginal)
+  (enable-buffer-trace-buffer 'manual)
+  (enable-buffer-trace-buffer 'production)
+  (enable-buffer-trace-buffer 'retrieval)
+  (enable-buffer-trace-buffer 'visual)
+  (enable-buffer-trace-buffer 'visual-location)
     
   (run time nil)
   

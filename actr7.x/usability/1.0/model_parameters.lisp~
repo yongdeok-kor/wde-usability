@@ -68,8 +68,6 @@
     
     ))
 
-(add-act-r-command "setting-twin-parameters-for-model", 'setting-twin-parameters-for-model)
-
 
 ;;;;;;;;;;;;
 ;;;
@@ -401,23 +399,7 @@
     
     (setf value (+ force (act-r-noise (get-value-twin-noise))))
     (input-human-error-parameter value)
-    ))
+  ))
 
-
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; TOTAL
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(defun output-total-model-parameters ()
-  (output-ACT-R-model-output-parameter (get-saved-trace))
-  (output-learnability-parameter)
-  (output-memorability-parameter)
-  (output-utility-parameter)
-  (output-efficiency-parameter)
-  (output-effectiveness-parameter)
-  (output-performance-parameter)
-  )
-
-(add-act-r-command "output-total-model-parameters", 'output-total-model-parameters)
 
   
