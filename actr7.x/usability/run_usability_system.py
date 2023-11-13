@@ -18,9 +18,9 @@ import matplotlib.image as mpimg
 from io import BytesIO
 from PIL import Image
 
-actr.load_act_r_code("wde-usability/actr7.x/usability/system_interface.lisp")
+actr.load_act_r_code("actr7.x/usability/system_interface.lisp")
 
-brain_image_path = 'wde-usability/actr7.x/usability/Brain.png'
+brain_image_path = 'actr7.x/usability/brain_img.png'
 
 def run_usability_system(time, task, age, force, noise):
     total_usability_value = 0
@@ -37,13 +37,12 @@ def run_usability_system(time, task, age, force, noise):
 
     actr.reset()
 
-    actr.load_act_r_code("wde-usability/actr7.x/usability/1.0/model_parameters.lisp")
+    actr.load_act_r_code("actr7.x/usability/1.0/model_parameters.lisp")
 
     if task[0] == "arm":
-        actr.load_act_r_code("wde-usability/actr7.x/usability/1.0/task/simple_arm_movement_task.lisp")
+        actr.load_act_r_code("actr7.x/usability/1.0/task/simple_arm_movement_task.lisp")
     elif task[0] == "gait":
-        actr.load_act_r_code("wde-usability/actr7.x/usability/1.0/task/simple_gait_task.lisp")
-
+        actr.load_act_r_code("actr7.x/usability/1.0/task/simple_gait_task.lisp")
 
 
     ##setting parameters
@@ -70,6 +69,11 @@ def run_usability_system(time, task, age, force, noise):
     efficiency = get_value_mental_workload_parameter()
     effectiveness = get_value_effectiveness_parameter()
     performance_time = time
+
+    print("learnability: ", learnability)
+    print("utility: ", utility)
+    print("efficiency: ", efficiency)
+    print("effectiveness: ", effectiveness)
 
     total_usability_value = (learnability + utility + efficiency + effectiveness) / 4
 

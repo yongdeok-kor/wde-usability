@@ -52,8 +52,6 @@
 
     (when (eq trajectory 0) (setf trajectory nil))
 
-    (load "actr7.x/usability/1.0/model_parameters.lisp")
-
     ;;load task and model
     (cond ((string= (first task) "arm")
 	   (load "actr7.x/usability/1.0/task/simple_arm_movement_task.lisp"))
