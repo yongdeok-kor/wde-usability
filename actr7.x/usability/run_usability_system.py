@@ -18,10 +18,9 @@ import matplotlib.image as mpimg
 from io import BytesIO
 from PIL import Image
 
-
 actr.load_act_r_code("wde-usability/actr7.x/usability/system_interface.lisp")
 
-brain_image_path = 'github/wde-usability/actr7.x/usability/brain_img.png'
+brain_image_path = 'wde-usability/actr7.x/usability/Brain.png'
 
 def run_usability_system(time, task, age, force, noise):
     total_usability_value = 0
@@ -113,6 +112,7 @@ def usability_figure(values):
                    wedgeprops=dict(width=0.4), counterclock=False)
         axs[i].set_title(label)
         axs[i].text(0, 0, f"{value}", ha='center', va='center', color='black', fontsize=14)
+        
     
     # 이미지로 저장
     img = BytesIO()
@@ -129,7 +129,7 @@ def usability_figure_with_brain_data(values, brain_parts_activity, brain_activit
     labels = ["TOTAL USABILITY", "LEARNABILITY", "UTILITY", "EFFICIENCY", "EFFECTIVENESS"]
 
     # 전체 그래프 레이아웃 설정
-    fig = plt.figure(figsize=(15, 6)) #15, 6
+    fig = plt.figure(figsize=(18, 6)) #15, 6
     gs = fig.add_gridspec(2, 3, height_ratios=[1, 2])
 
     # 도너츠 원형 그래프
@@ -137,8 +137,11 @@ def usability_figure_with_brain_data(values, brain_parts_activity, brain_activit
     for i, (label, value) in enumerate(zip(labels, values)):
         colors = ['crimson', 'lightgray'] if label == "TOTAL USABILITY" else ['blue', 'lightgray']
         axs0.pie([value, 100 - value], labels=[None, None], startangle=90, autopct='', colors=colors,
-                 wedgeprops=dict(width=0.4), counterclock=False, radius=1, center=(i * 2.2, 0))
-        axs0.text(i * 2.2, 0, f"{value}", ha='center', va='center', color='black', fontsize=14)
+                 wedgeprops=dict(width=0.4), counterclock=False, radius=1, center=(i * 2.7, 0))
+        #axs0.set_title(label)
+        axs0.text(i * 2.7, 0, f"{value}", ha='center', va='center', color='black', fontsize=14)
+        axs0.text(i * 2.7, 1.4, label, ha='center', va='center', color='black', fontsize=14)  # 각 원형 그래프에 라벨 추가
+
 
     # 뇌의 4부분 활성화 정도 그래프
     axs1 = fig.add_subplot(gs[1, 0])
