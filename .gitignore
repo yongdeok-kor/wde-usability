@@ -17,3 +17,5 @@ actr7.x/other-files
 actr7.x/support
 quicklisp
 *.fasl
+*~
+__pycache__
