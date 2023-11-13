@@ -17,7 +17,7 @@
 ;;;;;;;;;;;;
 
 ;(load-act-r-model "~/Documents/MODEL/usability/1.0/simple_model.lisp")
-(load-act-r-model "wde-usability/actr7.x/usability/1.0/model/simple_model.lisp")
+(load-act-r-model "actr7.x/usability/1.0/model/simple_model.lisp")
 
 
 (defun set-arm-movement-task-parameters (params)
