@@ -18,6 +18,7 @@ import matplotlib.image as mpimg
 from io import BytesIO
 from PIL import Image
 
+#actr.load_act_r_code("wde-usability/actr7.x/usability/system_interface.lisp")
 actr.load_act_r_code("actr7.x/usability/system_interface.lisp")
 
 brain_image_path = 'actr7.x/usability/brain_img.png'
@@ -43,6 +44,7 @@ def run_usability_system(time, task, age, force, noise):
         actr.load_act_r_code("actr7.x/usability/1.0/task/simple_arm_movement_task.lisp")
     elif task[0] == "gait":
         actr.load_act_r_code("actr7.x/usability/1.0/task/simple_gait_task.lisp")
+
 
 
     ##setting parameters
@@ -133,11 +135,11 @@ def usability_figure_with_brain_data(values, brain_parts_activity, brain_activit
     labels = ["TOTAL USABILITY", "LEARNABILITY", "UTILITY", "EFFICIENCY", "EFFECTIVENESS"]
 
     # 전체 그래프 레이아웃 설정
-    fig = plt.figure(figsize=(18, 6)) #15, 6
-    gs = fig.add_gridspec(2, 3, height_ratios=[1, 2])
+    fig = plt.figure(figsize=(18, 9))
+    gs = fig.add_gridspec(nrows=2, ncols=2, left=0.1, bottom=0.15,  height_ratios=[1.2, 2.3])
 
     # 도너츠 원형 그래프
-    axs0 = fig.add_subplot(gs[0, :])
+    axs0 = fig.add_subplot(gs[0, 1:])
     for i, (label, value) in enumerate(zip(labels, values)):
         colors = ['crimson', 'lightgray'] if label == "TOTAL USABILITY" else ['blue', 'lightgray']
         axs0.pie([value, 100 - value], labels=[None, None], startangle=90, autopct='', colors=colors,
@@ -175,7 +177,7 @@ def usability_figure_with_brain_data(values, brain_parts_activity, brain_activit
     # 이미지로 저장
     img = BytesIO()
     plt.tight_layout()
-    plt.savefig(img, format='png', dpi=100)
+    plt.savefig(img, format='png', dpi=72)
     img.seek(0)
     
     return img
