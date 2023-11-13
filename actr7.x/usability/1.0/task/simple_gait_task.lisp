@@ -42,6 +42,7 @@
   ;(setf *text* nil)
   ;(setf *stroop-list* (make-stroop-list *level*))
 					;(setf *WORKLOAD* nil)
+  (init-cognitive-global-parameters)
 
   (setf *gait-pos* 0)
   

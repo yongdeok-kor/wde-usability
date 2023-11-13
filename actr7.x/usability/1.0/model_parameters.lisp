@@ -421,3 +421,259 @@
 (add-act-r-command "output-total-model-parameters" 'output-total-model-parameters)
 
   
+
+
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; BRAIN ACTIVITY FUNCTION!
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;
+;; 0. Total value
+;; 1-1. Imaginal
+;; 1-2. Visual
+;; 1-3. Production
+;; 1-4. Declarative
+;; 2. Brain activity Time Series
+;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defun output-brain-activity-parameter ()
+  (let ((value 0)
+	(main-task nil))
+    
+    (cond ((equal (first (get-value-task-information)) "arm") (setf main-task 'arm))
+	  ((equal (first (get-value-task-information)) "gait") (setf main-task 'gait))
+	  )
+    
+    (setf value (get-total-workload main-task))
+    
+    (input-mental-workload-parameter value)
+    ))
+
+
+(defstruct brain-activity-reference
+  total-value
+  production
+  visual
+  retrieval
+  imaginal
+  manual
+  time)
+  
+(defstruct brain-activity 
+  buffer
+  value
+  weight
+  active
+  s-time
+  e-time)
+
+
+(defvar *BRAIN-ACTIVITY* nil)
+(defparameter *SAVE-BRAIN-ACTIVITY* t)
+
+
+(defun get-buffer-activity (buffer record mstime save)
+  (cond ((and save 
+              (not (brain-activity-active buffer)) 
+              (or (buffer-summary-busy record) (buffer-summary-request record)))
+         (setf (brain-activity-active buffer) t)
+         (setf (brain-activity-s-time buffer) (/ mstime 1000)))
+        ((and (brain-activity-active buffer) 
+              (or (not (buffer-summary-busy record)) (buffer-summary-busy->free record) (buffer-summary-error record)))
+         (setf (brain-activity-active buffer) nil)
+         (setf (brain-activity-e-time buffer) (/ mstime 1000))
+         (setf (brain-activity-value buffer) (+ (brain-activity-value buffer)
+                                          (* (brain-activity-weight buffer) 
+                                             (- (brain-activity-e-time buffer) (brain-activity-s-time buffer))))))))
+
+
+(defun get-time-series-brain-activity ()
+  (let ((pb (make-brain-activity :buffer 'production :value 0 :weight 1 :active nil :s-time 0.0 :e-time 0.0))
+        (vb (make-brain-activity :buffer 'visual     :value 0 :weight 1 :active nil :s-time 0.0 :e-time 0.0))
+        (rb (make-brain-activity :buffer 'retrieval  :value 0 :weight 1 :active nil :s-time 0.0 :e-time 0.0))
+        (ib (make-brain-activity :buffer 'imaginal   :value 0 :weight 1 :active nil :s-time 0.0 :e-time 0.0))
+        (mb (make-brain-activity :buffer 'manual     :value 0 :weight 1 :active nil :s-time 0.0 :e-time 0.0))
+	(pre-time 0))
+
+    (dolist (current-buffer-record (get-current-buffer-trace)) ;;buffer-record every mstime
+      (let* ((mstime       (buffer-record-ms-time current-buffer-record))  
+             (buffers      (buffer-record-buffers current-buffer-record)))
+
+	(when (> (- mstime pre-time) 1000)
+       
+         (let ((value  (+ (brain-activity-value pb) 
+                          (brain-activity-value vb) 
+                          (brain-activity-value rb) 
+                          (brain-activity-value ib) 
+                          (brain-activity-value mb))))
+            ;(format t "~% VALUE: ~f~%" value)
+           (push (make-brain-activity-reference :total-value value
+						:production (brain-activity-value pb)
+						:visual (brain-activity-value vb)
+						:retrieval (brain-activity-value rb)
+						:imaginal (brain-activity-value ib)
+						:manual (brain-activity-value mb)
+						:time (/ mstime 1000)) *BRAIN-ACTIVITY*)
+          
+          ;;workload initiation
+           (setf pb (make-brain-activity :buffer 'production :value 0 :weight 1 :active nil :s-time 0.0 :e-time 0.0))
+           (setf vb (make-brain-activity :buffer 'visual     :value 0 :weight 1 :active nil :s-time 0.0 :e-time 0.0))
+           (setf rb (make-brain-activity :buffer 'retrieval  :value 0 :weight 1 :active nil :s-time 0.0 :e-time 0.0))
+           (setf ib (make-brain-activity :buffer 'imaginal   :value 0 :weight 1 :active nil :s-time 0.0 :e-time 0.0))
+           (setf mb (make-brain-activity :buffer 'manual     :value 0 :weight 1 :active nil :s-time 0.0 :e-time 0.0)))
+
+	 (setf pre-time mstime))
+
+
+	;(format t "~% This part is performed?? time: ~a // ~a~%" mstime pre-time)
+	
+        (dolist (buffer buffers)
+          (case (buffer-summary-name buffer)
+              ((production) (get-buffer-activity pb buffer mstime *SAVE-BRAIN-ACTIVITY*))
+              ((visual)     (get-buffer-activity vb buffer mstime *SAVE-BRAIN-ACTIVITY*))
+              ((retrieval)  (get-buffer-activity rb buffer mstime *SAVE-BRAIN-ACTIVITY*))
+              ((imaginal)   (get-buffer-activity ib buffer mstime *SAVE-BRAIN-ACTIVITY*))
+              ((manual)     (get-buffer-activity mb buffer mstime *SAVE-BRAIN-ACTIVITY*))))))
+
+     (let ((value  (+ (workload-value pb) 
+                      (workload-value vb) 
+                      (workload-value rb) 
+                      (workload-value ib) 
+                      (workload-value mb))))
+       (push (make-brain-activity-reference :total-value value
+					    :production (brain-activity-value pb)
+					    :visual (brain-activity-value vb)
+					    :retrieval (brain-activity-value rb)
+					    :imaginal (brain-activity-value ib)
+					    :manual (brain-activity-value mb)
+					    :time (mp-time)) *BRAIN-ACTIVITY*
+					    ))))
+
+;;;
+;;; DECAY FUNCTION for brain acitivty
+;;;
+(defparameter *brain-decay* .156);0.156);.6)
+
+(defun get-brain-activity-including-decay (reference decay ctime) ;;(WORKLOAD-DELAY 'MEMORY *WORKLOAD* (mp-time))
+  (let ((total 0)
+	(production 0)
+	(visual 0)
+	(retrieval 0)
+	(imaginal 0)
+	(manual 0))
+    (dolist (ref reference)
+      (let* ((rtime (- ctime (workload-reference-time ref)))
+	     (tbav (brain-activity-reference-total-value ref))
+	     (pbav (brain-activity-reference-production ref))
+	     (vbav (brain-activity-reference-visual ref))
+	     (rbav (brain-activity-reference-retrieval ref))
+	     (ibav (brain-activity-reference-imaginal ref))
+	     (mbav (brain-activity-reference-manual ref))
+	     (tv (if (= rtime 0) tbav (* tbav (expt rtime (* decay -1)))))
+	     (pv (if (= rtime 0) pbav (* pbav (expt rtime (* decay -1)))))
+	     (vv (if (= rtime 0) vbav (* vbav (expt rtime (* decay -1)))))
+	     (rv (if (= rtime 0) rbav (* rbav (expt rtime (* decay -1)))))
+	     (iv (if (= rtime 0) ibav (* ibav (expt rtime (* decay -1)))))
+	     (mv (if (= rtime 0) mbav (* mbav (expt rtime (* decay -1))))))
+
+	(when (> rtime 0)
+	  (incf total tv)
+	  (incf production pv)
+	  (incf visual vv)
+	  (incf retrieval rv)
+	  (incf imaginal iv)
+	  (incf manual mv))
+	))
+    (list total production visual retrieval imaginal manual)
+    ))
+
+(defun get-brain-activity-no-decay (reference ctime) 
+  (let ((total 0)
+	(production 0)
+	(visual 0)
+	(retrieval 0)
+	(imaginal 0)
+	(manual 0))
+    (dolist (ref reference)
+      (let* ((rtime (- ctime (workload-reference-time ref)))
+	     (tbav (brain-activity-reference-total-value ref))
+	     (pbav (brain-activity-reference-production ref))
+	     (vbav (brain-activity-reference-visual ref))
+	     (rbav (brain-activity-reference-retrieval ref))
+	     (ibav (brain-activity-reference-imaginal ref))
+	     (mbav (brain-activity-reference-manual ref)))
+
+	(when (> rtime 0)
+	  (incf total tbav)
+	  (incf production pbav)
+	  (incf visual vbav)
+	  (incf retrieval rbav)
+	  (incf imaginal ibav)
+	  (incf manual mbav))
+	))
+    (list total production visual retrieval imaginal manual)
+    ))
+
+
+(defun get-total-brain-activity ()
+  ;;
+  ;; 0. Total value
+  ;; 1-1. Imaginal
+  ;; 1-2. Visual
+  ;; 1-3. Production
+  ;; 1-4. Declarative
+  ;; 2. Brain activity Time Series
+  ;;
+  
+  (get-time-series-brain-activity)
+
+  (let* ((activity (get-brain-activity-including-decay *BRAIN-ACTIVITY* *brain-decay* (mp-time)))
+	 ;(activity (get-brain-activity-no-decay *BRAIN-ACTIVITY* (mp-time)))
+	 (total (* 100 (/ (first activity) (* 5 (mp-time)))))
+	 (imaginal (* 100 (/ (fifth activity) (mp-time))))
+	 (visual (* 100 (/ (third activity) (mp-time))))
+	 (production (* 100 (/ (second activity) (mp-time))))
+	 (declarative (* 100 (/ (fourth activity) (mp-time))))
+	 (time-series nil))
+
+  (do ((i 0 (+ i 1)))
+      ((> i (mp-time)) time-series)
+
+    (let* ((activity-value (first (get-brain-activity-including-decay *BRAIN-ACTIVITY* *brain-decay* i)))
+	   (no-decay-value (first (get-brain-activity-no-decay *BRAIN-ACTIVITY* i)))
+	   (floor-value (if (realp activity-value) (floor activity-value) (floor no-decay-value))))
+
+      (setf time-series (append time-series (list (list i floor-value)))))
+	  
+
+    ;(setf time-series (append time-series (list (list i (floor (first (get-brain-activity-including-decay *BRAIN-ACTIVITY* *brain-decay* i)))))))
+    )
+    (list total (list declarative imaginal production visual) time-series)
+    ))
+
+
+(add-act-r-command "get-total-brain-activity" 'get-total-brain-activity)
+
+
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Initialize the cognitive parameters
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;
+;; 1. workload
+;; 2. utility
+;; 3. brain activity
+;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(defun init-cognitive-global-parameters ()
+
+  (setf *WORKLOAD* nil)
+  (setf *UTILITY* nil)
+  (setf *BRAIN-ACTIVITY* nil)
+
+  )
+
+(add-act-r-command "init-cognitive-global-parameters" 'init-cognitive-global-parameters)

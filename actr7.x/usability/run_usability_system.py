@@ -11,10 +11,17 @@
 import actr
 import math
 import matplotlib.pyplot as plt
+import numpy as np
+from matplotlib.colors import Normalize
+from matplotlib.cm import ScalarMappable
+import matplotlib.image as mpimg
 from io import BytesIO
+from PIL import Image
 
 
-actr.load_act_r_code("actr7.x/usability/system_interface.lisp")
+actr.load_act_r_code("wde-usability/actr7.x/usability/system_interface.lisp")
+
+brain_image_path = 'github/wde-usability/actr7.x/usability/brain_img.png'
 
 def run_usability_system(time, task, age, force, noise):
     total_usability_value = 0
@@ -31,12 +38,12 @@ def run_usability_system(time, task, age, force, noise):
 
     actr.reset()
 
-    actr.load_act_r_code("actr7.x/usability/1.0/model_parameters.lisp")
+    actr.load_act_r_code("wde-usability/actr7.x/usability/1.0/model_parameters.lisp")
 
     if task[0] == "arm":
-        actr.load_act_r_code("actr7.x/usability/1.0/task/simple_arm_movement_task.lisp")
+        actr.load_act_r_code("wde-usability/actr7.x/usability/1.0/task/simple_arm_movement_task.lisp")
     elif task[0] == "gait":
-        actr.load_act_r_code("actr7.x/usability/1.0/task/simple_gait_task.lisp")
+        actr.load_act_r_code("wde-usability/actr7.x/usability/1.0/task/simple_gait_task.lisp")
 
 
 
@@ -69,7 +76,7 @@ def run_usability_system(time, task, age, force, noise):
 
     #make_usability_graph([total_usability_value, learnability, utility, efficiency, effectiveness])
 
-    return_usability_value = [math.floor(total_usability_value), [memorability, utility, efficiency, effectiveness], performance_time, get_value_ACT_R_model_output()]
+    return_usability_value = [math.floor(total_usability_value), [learnability, utility, efficiency, effectiveness], performance_time, get_value_ACT_R_model_output()]
 
     #return return_usability_value
     return return_usability_value
@@ -85,22 +92,27 @@ def make_usability_graph (usability):
 
 def draw_usability_graph (time, task, age, force, noise):
     model_results = run_usability_system(time, task, age, force, noise)
-    return usability_figure([model_results[0], model_results[1][0], model_results[1][1], model_results[1][2], model_results[1][3]])
+
+    usability_values = [model_results[0], model_results[1][0], model_results[1][1], model_results[1][2], model_results[1][3]]
+    brain_parts_activity = actr.current_connection.evaluate_single("get-total-brain-activity")
+
+    return usability_figure_with_brain_data(usability_values, brain_parts_activity[1], brain_parts_activity[2])
 
 
 def usability_figure(values):
     # 항목 리스트
-    labels = ["TOTAL_USABILITY", "LEARNABILITY", "UTILITY", "EFFICIENCY", "EFFECTIVENESS"]
+    labels = ["TOTAL USABILITY", "LEARNABILITY", "UTILITY", "EFFICIENCY", "EFFECTIVENESS"]
 
     # 그래프의 크기와 여백을 설정
-    fig, axs = plt.subplots(1, len(labels), figsize=(15, 3))
+    fig, axs = plt.subplots(1, len(labels), figsize=(12, 2.5))
     
     # 각 항목에 대한 도너츠 모양 원형 그래프를 그립니다.
     for i, (label, value) in enumerate(zip(labels, values)):
-        axs[i].pie([value, 100 - value], labels=[label if p == value else None for p in [value, 100-value]], 
-                   startangle=90, autopct=lambda p: '{:.0f}'.format(p) if p == value else '', 
+        colors = ['crimson', 'lightgray'] if label == "TOTAL USABILITY" else ['green', 'lightgray']
+        axs[i].pie([value, 100 - value], labels=[None, None], startangle=90, autopct=lambda p: '', colors=colors,
                    wedgeprops=dict(width=0.4), counterclock=False)
         axs[i].set_title(label)
+        axs[i].text(0, 0, f"{value}", ha='center', va='center', color='black', fontsize=14)
     
     # 이미지로 저장
     img = BytesIO()
@@ -112,6 +124,80 @@ def usability_figure(values):
 
 
 
+def usability_figure_with_brain_data(values, brain_parts_activity, brain_activity_time_series):
+    # 항목 리스트
+    labels = ["TOTAL USABILITY", "LEARNABILITY", "UTILITY", "EFFICIENCY", "EFFECTIVENESS"]
+
+    # 전체 그래프 레이아웃 설정
+    fig = plt.figure(figsize=(15, 6)) #15, 6
+    gs = fig.add_gridspec(2, 3, height_ratios=[1, 2])
+
+    # 도너츠 원형 그래프
+    axs0 = fig.add_subplot(gs[0, :])
+    for i, (label, value) in enumerate(zip(labels, values)):
+        colors = ['crimson', 'lightgray'] if label == "TOTAL USABILITY" else ['blue', 'lightgray']
+        axs0.pie([value, 100 - value], labels=[None, None], startangle=90, autopct='', colors=colors,
+                 wedgeprops=dict(width=0.4), counterclock=False, radius=1, center=(i * 2.2, 0))
+        axs0.text(i * 2.2, 0, f"{value}", ha='center', va='center', color='black', fontsize=14)
+
+    # 뇌의 4부분 활성화 정도 그래프
+    axs1 = fig.add_subplot(gs[1, 0])
+
+    brain_img = mpimg.imread(brain_image_path)
+    axs1.imshow(brain_img, extent=[-1, 1, -1, 1], aspect='auto', zorder=1)
+    
+    cmap = plt.cm.Reds
+    norm = Normalize(vmin=0, vmax=100)
+    sm = ScalarMappable(cmap=cmap, norm=norm)
+    sm.set_array([])
+    # 뇌의 4부분 활성화 정도를 2D 배열로 변환
+    brain_activity_2d = np.array(brain_parts_activity).reshape(2, 2)
+    axs1.imshow(brain_activity_2d, cmap=cmap, norm=norm, extent=[-1, 1, -1, 1], aspect='auto', zorder=0)
+    axs1.set_title("Brain Activity (4 regions)")
+    axs1.axis('off')
+
+    # 시간에 따른 뇌 활성화 정도 그래프
+    axs2 = fig.add_subplot(gs[1, 1])
+    # 시간과 활성화 정도 데이터 추출
+    times, activities = zip(*brain_activity_time_series)
+    axs2.plot(times, activities, color='green')
+    axs2.set_title("Brain Activity Over Time")
+    axs2.set_xlabel("Time")
+    axs2.set_ylabel("Activity")
+
+    # 이미지로 저장
+    img = BytesIO()
+    plt.tight_layout()
+    plt.savefig(img, format='png', dpi=100)
+    img.seek(0)
+    
+    return img
+
+
+def draw_example_img():
+
+
+    img = draw_usability_graph(10, ["gait", "adaptive"], 30, 30, 5)
+
+    # Convert BytesIO object to PIL image
+    
+    img_pil = Image.open(img)
+
+    # check if the image is in RGBA format
+
+    if img_pil.mode != 'RGBA':
+        img_pil = img_pil.convert('RGBA')
+
+    plt.close('all')
+
+        
+    # show the image!
+    plt.imshow(img_pil, cmap=None)
+    plt.axis('off')
+    plt.show()
+    
+    #plt.imshow(draw_usability_graph(10, ["gait", "adaptive"], 30, 30, 5))
+    #plt.show()
 
 
 def get_usability_value_from_model (time, task, age, cog_level, trajectory, force, noise):
