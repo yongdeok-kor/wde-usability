@@ -446,9 +446,9 @@
 	  ((equal (first (get-value-task-information)) "gait") (setf main-task 'gait))
 	  )
     
-    (setf value (get-total-workload main-task))
+    (setf value (get-total-brain-activity))
     
-    (input-mental-workload-parameter value)
+    ;(input-mental-workload-parameter value)
     ))
 
 
@@ -537,11 +537,11 @@
               ((imaginal)   (get-buffer-activity ib buffer mstime *SAVE-BRAIN-ACTIVITY*))
               ((manual)     (get-buffer-activity mb buffer mstime *SAVE-BRAIN-ACTIVITY*))))))
 
-     (let ((value  (+ (workload-value pb) 
-                      (workload-value vb) 
-                      (workload-value rb) 
-                      (workload-value ib) 
-                      (workload-value mb))))
+     (let ((value  (+ (brain-activity-value pb) 
+                      (brain-activity-value vb) 
+                      (brain-activity-value rb) 
+                      (brain-activity-value ib) 
+                      (brain-activity-value mb))))
        (push (make-brain-activity-reference :total-value value
 					    :production (brain-activity-value pb)
 					    :visual (brain-activity-value vb)
@@ -564,7 +564,7 @@
 	(imaginal 0)
 	(manual 0))
     (dolist (ref reference)
-      (let* ((rtime (- ctime (workload-reference-time ref)))
+      (let* ((rtime (- ctime (brain-activity-reference-time ref)))
 	     (tbav (brain-activity-reference-total-value ref))
 	     (pbav (brain-activity-reference-production ref))
 	     (vbav (brain-activity-reference-visual ref))
@@ -597,7 +597,7 @@
 	(imaginal 0)
 	(manual 0))
     (dolist (ref reference)
-      (let* ((rtime (- ctime (workload-reference-time ref)))
+      (let* ((rtime (- ctime (brain-activity-reference-time ref)))
 	     (tbav (brain-activity-reference-total-value ref))
 	     (pbav (brain-activity-reference-production ref))
 	     (vbav (brain-activity-reference-visual ref))
