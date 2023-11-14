@@ -69,7 +69,7 @@ def score():
     noise = 5
     print(timeout, task, age, force, noise)
     usability = run_usability_system(timeout, task, age, force, noise)[0]
-    return f"{round(usability/100.0, 4)}"
+    return f"{round(float(usability), 1)}"
 
 @app.route('/score/usability')
 def usability_result():
