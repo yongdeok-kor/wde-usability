@@ -10,6 +10,7 @@
 
 import actr
 import math
+import random
 import matplotlib.pyplot as plt
 import numpy as np
 from matplotlib.colors import Normalize
@@ -71,7 +72,14 @@ def run_usability_system(time, task, age, force, noise):
     efficiency = get_value_mental_workload_parameter()
     effectiveness = get_value_effectiveness_parameter()
     performance_time = time
-
+    
+    ##temp code
+    learnability = control_usability_value(learnability)
+    memorability = control_usability_value(memorability)
+    utility = control_usability_value(utility)
+    efficiency = control_usability_value(efficiency)
+    effectiveness = control_usability_value(effectiveness)
+    
     print("learnability: ", learnability)
     print("utility: ", utility)
     print("efficiency: ", efficiency)
@@ -86,6 +94,13 @@ def run_usability_system(time, task, age, force, noise):
     #return return_usability_value
     return return_usability_value
 
+def control_usability_value (value):
+    if value <= 0:
+        value = random.randrange(1, 15)
+    elif value >= 100:
+        value = random.randrange(85, 99)
+
+    return value
 
 def make_usability_graph (usability):
     x = np.arange(len(usability))
